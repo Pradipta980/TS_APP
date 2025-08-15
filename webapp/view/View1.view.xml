@@ -1,6 +1,28 @@
-<mvc:View controllerName="tsapp.controller.View1"
+<mvc:View
+    controllerName="tsapp.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <footer>
+            <OverflowToolbar>
+                <Button
+                    text="{messageHelperModel>/count}"
+                    icon="{messageHelperModel>/buttonIcon}"
+                    type="{messageHelperModel>/buttonType}"
+                    press=".onPressPopBtn"
+                />
+                <ToolbarSpacer />
+                <Button text="generateMessages" press=".generateMessages"></Button>
+                <ToolbarSpacer />
+                <Button
+                    text="openDialog"
+                    press=".onPressDiaBtn"
+                />
+            </OverflowToolbar>
+        </footer>
     </Page>
 </mvc:View>
