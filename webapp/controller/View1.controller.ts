@@ -1,20 +1,25 @@
 import { Button$PressEvent } from "sap/m/Button";
 import Message from "sap/ui/core/message/Message";
 import MessageType from "sap/ui/core/message/MessageType";
-import Controller from "sap/ui/core/mvc/Controller";
+import View from "sap/ui/core/mvc/View";
+import JSONModel from "sap/ui/model/json/JSONModel";
 import MessagingHelper from "tsapp/helper/MessagingHelper";
 import showMessageBox from "tsapp/utils/showMessageBox";
+import BaseController from "./BaseController";
 
 /**
  * @namespace tsapp.controller
  */
-export default class View1 extends Controller {
+export default class View1 extends BaseController {
     private messagingHelper: MessagingHelper;
 
     /*eslint-disable @typescript-eslint/no-empty-function*/
     public onInit(): void {
         this.messagingHelper = new MessagingHelper();
         this.getView()?.setModel(this.messagingHelper.getMessageHelperModel(), "messageHelperModel");
+
+        this.getView()?.setModel(new JSONModel());
+        this.messagingHelper.registerObject(this.getView() as View, true);
     }
 
     onPressPopBtn(event: Button$PressEvent) {

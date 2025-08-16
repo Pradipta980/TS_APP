@@ -1,4 +1,5 @@
 <mvc:View
+    xmlns:form="sap.ui.layout.form"
     controllerName="tsapp.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
@@ -7,6 +8,27 @@
         id="page"
         title="{i18n>title}"
     >
+        <form:SimpleForm>
+            <form:content>
+                <Label text="llalala"></Label>
+                <Input
+                    value="{
+                    path: '/value1',
+                    type: 'sap.ui.model.type.Integer'
+                }"
+                />
+                <Label text="luli"></Label>
+                <Input
+                    value="{
+                    path: '/value2',
+                    type: 'sap.ui.model.type.Integer',
+                    constraints: {
+                        maximum: 5
+                    }
+                }"
+                />
+            </form:content>
+        </form:SimpleForm>
         <footer>
             <OverflowToolbar>
                 <Button
@@ -16,7 +38,10 @@
                     press=".onPressPopBtn"
                 />
                 <ToolbarSpacer />
-                <Button text="generateMessages" press=".generateMessages"></Button>
+                <Button
+                    text="generateMessages"
+                    press=".generateMessages"
+                />
                 <ToolbarSpacer />
                 <Button
                     text="openDialog"

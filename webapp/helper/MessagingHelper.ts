@@ -4,6 +4,7 @@ import { ButtonType } from "sap/m/library";
 import MessageItem from "sap/m/MessageItem";
 import MessagePopover, { MessagePopover$ActiveTitlePressEvent } from "sap/m/MessagePopover";
 import MessageView from "sap/m/MessageView";
+import ManagedObject from "sap/ui/base/ManagedObject";
 import BaseObject from "sap/ui/base/Object";
 import ElementRegistry from "sap/ui/core/ElementRegistry";
 import { URI } from "sap/ui/core/library";
@@ -41,6 +42,22 @@ export default class MessagingHelper extends BaseObject {
         this.resourceModel = new ResourceModel({
             bundleName: "tsapp.i18n"
         });
+    }
+
+    registerObject(object: ManagedObject, handleValidation: boolean){
+        Messaging.registerObject(object, handleValidation);
+    }
+
+    unregisterObject(object: ManagedObject){
+        Messaging.unregisterObject(object);
+    }
+
+    registerMessageProcessor(processor: MessageProcessor){
+        Messaging.registerMessageProcessor(processor);
+    }
+
+    unregisterMessageProcessor(processor: MessageProcessor){
+        Messaging.unregisterMessageProcessor(processor);
     }
 
     setMessageFilter(messageFilter?: Filter | Filter[]) {
@@ -201,8 +218,8 @@ export default class MessagingHelper extends BaseObject {
             longtextUrl: "{_messageModel>descriptionUrl}",
             type: "{_messageModel>type}",
             activeTitle: {
-                path: '_messageModel>controlId',
-                formatter: (controlId: string) => controlId ? true : false
+                path: '_messageModel>',
+                formatter: (message: Message) => message.getControlId() ? true : false
             }
         });
 
