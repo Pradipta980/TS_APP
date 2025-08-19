@@ -4,7 +4,7 @@ import { ButtonType } from "sap/m/library";
 import MessageItem from "sap/m/MessageItem";
 import MessagePopover, { MessagePopover$ActiveTitlePressEvent } from "sap/m/MessagePopover";
 import MessageView from "sap/m/MessageView";
-import ManagedObject from "sap/ui/base/ManagedObject";
+import ManagedObject from "sap/ui/base/ManagedObject"
 import BaseObject from "sap/ui/base/Object";
 import ElementRegistry from "sap/ui/core/ElementRegistry";
 import { URI } from "sap/ui/core/library";
@@ -18,6 +18,9 @@ import ListBinding from "sap/ui/model/ListBinding";
 import ResourceModel from "sap/ui/model/resource/ResourceModel";
 import debouncer from "tsapp/utils/debouncer";
 
+
+type SafeMessaging = Omit<typeof Messaging, "removeAllMessages" | "updateMessages">;
+
 /**
  * @namespace tsapp.helper
  */
@@ -28,6 +31,7 @@ export default class MessagingHelper extends BaseObject {
     private resourceModel: ResourceModel;
     private messageDialog: Dialog;
     private messagePopover: MessagePopover;
+    readonly messaging = Messaging as SafeMessaging;
 
     constructor(messageFilter?: Filter | Filter[]) {
         super();
@@ -44,32 +48,8 @@ export default class MessagingHelper extends BaseObject {
         });
     }
 
-    registerObject(object: ManagedObject, handleValidation: boolean){
-        Messaging.registerObject(object, handleValidation);
-    }
-
-    unregisterObject(object: ManagedObject){
-        Messaging.unregisterObject(object);
-    }
-
-    registerMessageProcessor(processor: MessageProcessor){
-        Messaging.registerMessageProcessor(processor);
-    }
-
-    unregisterMessageProcessor(processor: MessageProcessor){
-        Messaging.unregisterMessageProcessor(processor);
-    }
-
     setMessageFilter(messageFilter?: Filter | Filter[]) {
         this.messageBinding.filter(messageFilter);
-    }
-
-    addToMessaging(message: Message | Message[]) {
-        Messaging.addMessages(message);
-    }
-
-    removeFromMessaging(message: Message | Message[]) {
-        Messaging.removeMessages(message);
     }
 
     private getAllMessages(): Message[] {
@@ -77,12 +57,12 @@ export default class MessagingHelper extends BaseObject {
         return currentMessageContexts.map((context) => context.getObject() as Message);
     }
 
-    getMessages(params: { target?: string, isTrgetfrefix?: boolean, type?: MessageType, processor?: MessageProcessor })
+    getMessages(params: { target?: string, isTargetPrefix?: boolean, type?: MessageType, processor?: MessageProcessor })
         : Message[] {
-        const { target, isTrgetfrefix, type, processor } = params;
+        const { target, isTargetPrefix, type, processor } = params;
         const filteredMessages = this.getAllMessages().filter((message) => {
             const messageTarget = message.getTargets()[0] ?? "";
-            const targetMatched = !target || (isTrgetfrefix ? messageTarget.startsWith(target) : messageTarget === target);
+            const targetMatched = !target || (isTargetPrefix ? messageTarget.startsWith(target) : messageTarget === target);
             const typeMatched = !type || message.getType() === type;
             const processorMatched = !processor || message.getMessageProcessor() === processor;
 

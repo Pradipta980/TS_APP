@@ -11,7 +11,7 @@
         <form:SimpleForm>
             <form:content>
                 <Label text="llalala"></Label>
-                <Input
+                <Input id="test"
                     value="{
                     path: '/value1',
                     type: 'sap.ui.model.type.Integer'

@@ -6,6 +6,7 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import MessagingHelper from "tsapp/helper/MessagingHelper";
 import showMessageBox from "tsapp/utils/showMessageBox";
 import BaseController from "./BaseController";
+import Filter from "sap/ui/model/Filter";
 
 /**
  * @namespace tsapp.controller
@@ -19,7 +20,18 @@ export default class View1 extends BaseController {
         this.getView()?.setModel(this.messagingHelper.getMessageHelperModel(), "messageHelperModel");
 
         this.getView()?.setModel(new JSONModel());
-        this.messagingHelper.registerObject(this.getView() as View, true);
+        this.messagingHelper.messaging.registerObject(this.getView() as View, true);
+        this.messagingHelper.setMessageFilter(
+            new Filter({
+                and: false,
+                filters:[
+                    new Filter("target", "StartsWith", "lala"),
+                    new Filter("target", "StartsWith", this.getView()?.getId())
+                ]
+            })
+        );
+
+        
     }
 
     onPressPopBtn(event: Button$PressEvent) {
@@ -62,6 +74,7 @@ export default class View1 extends BaseController {
 
         for (let i = 0; i < messageCount; i++) {
             messages.push(new Message({
+                target: "lala-lili",
                 message: this.getRandomText("Message"),
                 additionalText: this.getRandomText("Additional"),
                 description: this.getRandomText("Description"),
@@ -69,6 +82,6 @@ export default class View1 extends BaseController {
             }));
         }
         this.messagingHelper.removeAllMessages();
-        this.messagingHelper.addToMessaging(messages);
+        this.messagingHelper.messaging.addMessages(messages);
     }
 }

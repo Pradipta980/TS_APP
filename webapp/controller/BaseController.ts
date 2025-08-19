@@ -5,11 +5,15 @@ import Component from "tsapp/Component";
  * @namespace tsapp.controller
  */
 export default class BaseController extends Controller{
-    getAppComponent(){
+    private getAppComponent(){
         return this.getOwnerComponent() as Component;
     }
 
     getAppRouter(){
         return this.getAppComponent().getRouter();
+    }
+
+    getModelHelper(){
+        return this.getAppComponent().getModelHelper();
     }
 }
