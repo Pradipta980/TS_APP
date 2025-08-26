@@ -37,8 +37,10 @@
     "dependencies": {
       "minUI5Version": "1.139.0",
       "libs": {
-        "sap.m": {},
-        "sap.ui.core": {}
+				"sap.f": {},
+				"sap.m": {},
+				"sap.ui.core": {},
+				"sap.uxap": {}
       }
     },
     "contentDensities": {
@@ -62,8 +64,7 @@
     },
     "routing": {
       "config": {
-        "routerClass": "sap.m.routing.Router",
-        "controlAggregation": "pages",
+        "routerClass": "sap.f.routing.Router",
         "controlId": "app",
         "transition": "slide",
         "type": "View",
@@ -74,17 +75,64 @@
       },
       "routes": [
         {
-          "name": "RouteView1",
-          "pattern": ":?query:",
+          "name": "route1",
+          "pattern": "",
           "target": [
-            "TargetView1"
+            "target1"
+          ]
+        },
+        {
+          "name": "route2",
+          "pattern": "route2",
+          "target": [
+            "target1",
+            "target2"
+          ]
+        },
+        {
+          "name": "route3",
+          "pattern": "route3",
+          "target": [
+            "target1",
+            "target2",
+            "target3"
+          ]
+        },
+        {
+          "name": "route4",
+          "pattern": "route4",
+          "target": [
+            "target1",
+            "target4",
+            "target5"
           ]
         }
       ],
       "targets": {
-        "TargetView1": {
+        "target1": {
           "id": "View1",
-          "name": "View1"
+          "name": "View1",
+          "controlAggregation": "beginColumnPages"
+        },
+        "target2": {
+          "id": "View2",
+          "name": "View2",
+          "controlAggregation": "midColumnPages"
+        },
+        "target3": {
+          "id": "View3",
+          "name": "View3",
+          "controlAggregation": "endColumnPages"
+        },        
+        "target4": {
+          "id": "View4",
+          "name": "View3",
+          "controlAggregation": "midColumnPages"
+        },        
+        "target5": {
+          "id": "View5",
+          "name": "View2",
+          "controlAggregation": "endColumnPages"
         }
       }
     },
