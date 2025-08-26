@@ -14,6 +14,17 @@
       "id": "@sap/generator-fiori:basic",
       "version": "1.18.4",
       "toolsId": "19a924bb-343d-4249-8cbb-9842df3071cd"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/v2/northwind/northwind.svc/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
     }
   },
   "sap.ui": {
@@ -37,10 +48,10 @@
     "dependencies": {
       "minUI5Version": "1.139.0",
       "libs": {
-				"sap.f": {},
-				"sap.m": {},
-				"sap.ui.core": {},
-				"sap.uxap": {}
+        "sap.f": {},
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.uxap": {}
       }
     },
     "contentDensities": {
@@ -53,6 +64,11 @@
         "settings": {
           "bundleName": "tsapp.i18n.i18n"
         }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
       }
     },
     "resources": {
@@ -70,15 +86,14 @@
         "type": "View",
         "viewType": "XML",
         "path": "tsapp.view",
-        "async": true,
-        "viewPath": "tsapp.view"
+        "async": true
       },
       "routes": [
         {
-          "name": "route1",
+          "name": "Categories",
           "pattern": "",
           "target": [
-            "target1"
+            "Categories"
           ]
         },
         {
@@ -109,9 +124,9 @@
         }
       ],
       "targets": {
-        "target1": {
-          "id": "View1",
-          "name": "View1",
+        "Categories": {
+          "id": "Categories",
+          "name": "Categories",
           "controlAggregation": "beginColumnPages"
         },
         "target2": {
@@ -123,12 +138,12 @@
           "id": "View3",
           "name": "View3",
           "controlAggregation": "endColumnPages"
-        },        
+        },
         "target4": {
           "id": "View4",
           "name": "View3",
           "controlAggregation": "midColumnPages"
-        },        
+        },
         "target5": {
           "id": "View5",
           "name": "View2",

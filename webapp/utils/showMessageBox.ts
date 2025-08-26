@@ -61,4 +61,3 @@ export default function showMessageBox(params: MBParamsByAction): Promise<Messag
 
   return promise;
 };
-

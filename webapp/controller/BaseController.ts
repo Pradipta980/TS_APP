@@ -1,19 +1,28 @@
 import Controller from "sap/ui/core/mvc/Controller";
+import Model from "sap/ui/model/Model";
 import Component from "tsapp/Component";
 
 /**
  * @namespace tsapp.controller
  */
 export default class BaseController extends Controller{
-    private getAppComponent(){
+    protected getAppComponent(){
         return this.getOwnerComponent() as Component;
     }
 
-    getAppRouter(){
-        return this.getAppComponent().getRouter();
+    protected getGlobalModel(name?: string){
+        return this.getAppComponent().getModel(name);
     }
 
-    getModelHelper(){
-        return this.getAppComponent().getModelHelper();
+    protected setGlobalModel(model: Model | null | undefined,name?: string){
+        return this.getAppComponent().setModel(model, name);
     }
+
+    protected getViewModel(name?: string){
+        return this.getView()?.getModel(name);
+    }
+
+    protected setViewModel(model: Model | null | undefined,name?: string){
+        return this.getView()?.setModel(model, name);
+    }    
 }

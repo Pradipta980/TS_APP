@@ -37,6 +37,16 @@ server:
           overridesToOverride: true
         excludePatterns:
           - /Component-preload.js
+    - name: sap-fe-mockserver
+      beforeMiddleware: csp
+      configuration:
+        mountPath: /
+        services:
+          - urlPath: /v2/northwind/northwind.svc
+            metadataPath: ./webapp/localService/mainService/metadata.xml
+            mockdataPath: ./webapp/localService/mainService/data
+            generateMockData: true
+        annotations: []
 builder:
   customTasks:
     - name: ui5-tooling-transpile-task
