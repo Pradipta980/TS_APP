@@ -1,5 +1,6 @@
 import Deferred from "sap/base/util/Deferred";
 import ODataModel from "sap/ui/model/odata/v2/ODataModel";
+import assertNever from "./assertNever";
 
 //Types
 type RemoveCallbacks<T> = Omit<Exclude<T, undefined>, "success" | "error">;
@@ -44,8 +45,7 @@ export default function promiseOdata<T>(
             break;
         default:
         // Exhaustiveness check
-        const _exhaustiveCheck: never = param;
-        throw new Error(`Unhandled OData action: ${(_exhaustiveCheck as any).action}`);
+        assertNever(param);
     };
 
     return { promise, abort };

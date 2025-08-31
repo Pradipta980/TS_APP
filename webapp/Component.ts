@@ -1,8 +1,8 @@
 import BaseComponent from "sap/ui/core/UIComponent";
 import Models from "./model/Models";
-import RoutingHelper from "./helper/RoutingHelper";
 import DataManager from "./helper/DataManager";
 import ODataModel from "sap/ui/model/odata/v2/ODataModel";
+import RoutingHelper from "./helper/RoutingHelper";
 
 /**
  * @namespace tsapp
@@ -26,7 +26,7 @@ export default class Component extends BaseComponent {
         this.setModel(appModel, "appModel");
 
         this.getRouter().initialize();
-        this.getRoutingHelper().start();
+        this.setModel(this.getRoutingHelper().getHelperModel(), "layoutModel");
     }
 
     public getModelHelper(): Models {
@@ -34,7 +34,7 @@ export default class Component extends BaseComponent {
     }
 
     public getRoutingHelper(): RoutingHelper {
-        return this.routingHelper ??= new RoutingHelper(this);
+        return this.routingHelper ??= RoutingHelper.getInstance(this)
     }
 
     public getDataManger(): DataManager{

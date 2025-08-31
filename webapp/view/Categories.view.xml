@@ -11,7 +11,15 @@
         <Table
             items="{appModel>/categories}"
             fixedLayout="false"
+            sticky="ColumnHeaders,GroupHeaders,HeaderToolbar,InfoToolbar"
+            itemPress=".onPressCategory"
+            busy="{appModel>/categoryBusy}"
         >
+            <headerToolbar>
+                <OverflowToolbar>
+                    <SearchField search=".onSearchCatagory" />
+                </OverflowToolbar>
+            </headerToolbar>
             <columns>
                 <Column>
                     <Text text="Category" />
@@ -20,7 +28,7 @@
                     <Text text="Image" />
                 </Column>
             </columns>
-            <ColumnListItem>
+            <ColumnListItem type="Navigation">
                 <ObjectIdentifier
                     title="{appModel>CategoryName} ({appModel>CategoryID})"
                     text="{appModel>Description}"

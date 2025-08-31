@@ -1,5 +1,6 @@
 import Deferred from "sap/base/util/Deferred";
 import MessageBox from "sap/m/MessageBox";
+import assertNever from "./assertNever";
 
 // Types
 type StripOnClose<T> = Omit<Exclude<T, undefined>, "onClose">;
@@ -16,21 +17,21 @@ type MBParams = AlertParam | ConfirmParam | ErrorParam | InformationParam | Show
 type MessageBoxActions = (keyof typeof MessageBox.Action) | (string & {}); // loose suggestion
 
 type MBParamsByAction =
-  { action: "alert", message: string, options?: AlertParam }
-  | { action: "confirm", message: string, options?: ConfirmParam }
-  | { action: "error", message: string, options?: ErrorParam }
-  | { action: "information", message: string, options?: InformationParam }
-  | { action: "show", message: string, options?: ShowParam }
-  | { action: "success", message: string, options?: SuccessParam }
-  | { action: "warning", message: string, options?: WarningParam };
+  { action: "alert", options?: AlertParam }
+  | { action: "confirm", options?: ConfirmParam }
+  | { action: "error", options?: ErrorParam }
+  | { action: "information", options?: InformationParam }
+  | { action: "show", options?: ShowParam }
+  | { action: "success", options?: SuccessParam }
+  | { action: "warning", options?: WarningParam };
 
-export default function showMessageBox(params: MBParamsByAction): Promise<MessageBoxActions> {
+export default function showMessageBox(message: string, params: MBParamsByAction): Promise<MessageBoxActions> {
   const { promise, resolve } = new Deferred<MessageBoxActions>();
   const addResolvers = (options?: MBParams) => {
     return { ...options, onClose: resolve };
   }
 
-  const { action, message, options } = params;
+  const { action, options } = params;
   switch (action) {
     case "alert":
       MessageBox.alert(message, addResolvers(options));
@@ -55,8 +56,7 @@ export default function showMessageBox(params: MBParamsByAction): Promise<Messag
       break;
     default:
       // Exhaustiveness check
-      const _exhaustiveCheck: never = params;
-      throw new Error(`Unhandled MessageBox action: ${(_exhaustiveCheck as any).action}`);
+      assertNever(params);
   };
 
   return promise;

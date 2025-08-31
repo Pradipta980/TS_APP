@@ -41,7 +41,8 @@
       "desktop": true,
       "tablet": true,
       "phone": true
-    }
+    },
+    "fullWidth": true
   },
   "sap.ui5": {
     "flexEnabled": false,
@@ -92,16 +93,18 @@
         {
           "name": "Categories",
           "pattern": "",
+          "layout": "OneColumn",
           "target": [
             "Categories"
           ]
         },
         {
-          "name": "route2",
-          "pattern": "route2",
+          "name": "CategoryDetail",
+          "pattern": "CategoryDetail/{categoryId}",
+          "layout": "TwoColumnsMidExpanded",
           "target": [
-            "target1",
-            "target2"
+            "Categories",
+            "CategoryDetail"
           ]
         },
         {
@@ -125,9 +128,12 @@
       ],
       "targets": {
         "Categories": {
-          "id": "Categories",
           "name": "Categories",
           "controlAggregation": "beginColumnPages"
+        },
+        "CategoryDetail": {
+          "name": "CategoryDetail",
+          "controlAggregation": "midColumnPages"
         },
         "target2": {
           "id": "View2",

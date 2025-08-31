@@ -1,10 +1,8 @@
 import FlexibleColumnLayout from "sap/f/FlexibleColumnLayout";
 import FlexibleColumnLayoutSemanticHelper from "sap/f/FlexibleColumnLayoutSemanticHelper";
 import { LayoutType } from "sap/f/library";
-import Router from "sap/f/routing/Router";
 import BaseObject from "sap/ui/base/Object";
 import View from "sap/ui/core/mvc/View";
-import { Router$BeforeRouteMatchedEvent } from "sap/ui/core/routing/Router";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Component from "tsapp/Component";
 
@@ -14,63 +12,30 @@ import Component from "tsapp/Component";
  */
 export default class RoutingHelper extends BaseObject {
     private helperModel = new JSONModel();
-    //state flag
-    private hasStarted = false
+    private readonly component: Component;
+    static instance: RoutingHelper | undefined;
 
-    constructor(
-        private readonly component: Component
-    ) {
+    private constructor(component: Component) {
+        if (RoutingHelper.instance) {
+            // ensure singleton in JS environment
+            throw new Error("Instance exists.Use RoutingHelper.getInstance(). Do not call the constructor directly.");
+        }
+
         super();
+        this.component = component;
+
+        //Listen to changes
+        this.getFcl().then((fcl) => fcl.attachStateChange(this.updateHelperModel, this));
+        this.component.getRouter().attachRouteMatched(this.updateHelperModel, this);
     }
 
-    async start() {
-        if (this.hasStarted) return;
-        this.hasStarted = true;
-
-        const fcl = await this.getFcl();
-
-        //Watch routing change
-        this.component.getRouter().attachBeforeRouteMatched(this.onBeforeRouteMatched, this);
-        // // Trigger event manually the first time, since we don't know when the helper was actually started
-        // const hashChanger = this.component.getRouter().getHashChanger();
-        // const routeInfo = this.component.getRouter().getRouteInfoByHash(hashChanger.getHash());
-        // if (routeInfo) {
-        //     this.component.getRouter().fireBeforeRouteMatched(routeInfo);
-        // } else {
-        //     fcl.setLayout(LayoutType.OneColumn);
-        // }
-
-        //Watch FCL state change
-        fcl.attachStateChange(this.onFclStateChange, this);
+    static getInstance(component: Component): RoutingHelper {
+        return RoutingHelper.instance ??= new RoutingHelper(component);
     }
 
-    async stop() {
-        this.hasStarted = false;
-        this.component.getRouter().detachBeforeRouteMatched(this.onBeforeRouteMatched, this);
-        const fcl = await this.getFcl();
-        fcl.detachStateChange(this.onFclStateChange, this);
-    }
-
-    private async onBeforeRouteMatched(event: Router$BeforeRouteMatchedEvent) {
-        const parameters = event.getParameters();
-        let layout = this.getLayout(parameters.name, parameters.arguments);
-        (await this.getFcl()).setLayout(layout);
-    }
-
-    private getLayout(name: any, args: any): LayoutType {
-        /**
-         * Parameters are kept as `any` since routing config is defined in manifest.json,
-         * making compile-time type inference impractical. This method will be revisited
-         * later to evaluate safer handling or runtime validation.
-         */
-        let layout = LayoutType.OneColumn
-        //TODO: implemtation soon
-        return layout;
-    }
-
-    private async onFclStateChange(){
-        const fclState = (await this.getFclHelper()).getCurrentUIState();
-        this.getHelperModel().setData(fclState);
+    private async updateHelperModel() {
+        const fclHelper = await this.getFclHelper();
+        this.helperModel.setData(fclHelper.getCurrentUIState());
     }
 
     private async getFcl(): Promise<FlexibleColumnLayout> {
@@ -90,12 +55,25 @@ export default class RoutingHelper extends BaseObject {
         return FlexibleColumnLayoutSemanticHelper.getInstanceFor(await this.getFcl(), oSettings);
     }
 
-    getHelperModel(){
+    getHelperModel(): JSONModel {
         return this.helperModel;
     }
 
-    destroy(): void {
-        this.stop();
+    async destroy(): Promise<void> {
+        const fcl = await this.getFcl();
+        fcl.detachStateChange(this.updateHelperModel, this);
+        this.component.getRouter().detachRouteMatched(this.updateHelperModel, this);
+        this.helperModel.destroy();
+        RoutingHelper.instance = undefined;
+        super.destroy();
+    }
+
+    /// Routing functions
+    navToCategoryList(replaceHistory?: boolean) {
+        this.component.getRouter().navTo("Categories", undefined, undefined, replaceHistory);
+    }
+    navToCategoryDetails(categoryId: string, replaceHistory?: boolean) {
+        this.component.getRouter().navTo("CategoryDetail", { categoryId }, undefined, replaceHistory);
     }
 
 }

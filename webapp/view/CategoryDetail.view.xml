@@ -1,0 +1,38 @@
+<mvc:View
+    xmlns:form="sap.ui.layout.form"
+    controllerName="tsapp.controller.CategoryDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page2"
+        title="{i18n>title}"
+    >
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <OverflowToolbarButton
+                    type="Transparent"
+                    icon="sap-icon://full-screen"
+                    press=".handleFullScreen"
+                    tooltip="Enter Full Screen Mode"
+                    visible="{= ${layoutModel>/actionButtonsInfo/midColumn/fullScreen} !== null }"
+                />
+                <OverflowToolbarButton
+                    type="Transparent"
+                    icon="sap-icon://exit-full-screen"
+                    press=".handleExitFullScreen"
+                    tooltip="Exit Full Screen Mode"
+                    visible="{= ${layoutModel>/actionButtonsInfo/midColumn/exitFullScreen} !== null }"
+                />
+                <OverflowToolbarButton
+                    type="Transparent"
+                    icon="sap-icon://decline"
+                    press=".handleClose"
+                    tooltip="Close column"
+                    visible="{= ${layoutModel>/actionButtonsInfo/midColumn/closeColumn} !== null }"
+                />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>
