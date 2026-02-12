@@ -19,7 +19,7 @@ import BaseObject from "sap/ui/base/Object"
  *
  * // Example: ODataListBinding (V4)
  * const listBinding = table.getBinding("items");
- * assertUi5Instance(listBinding, ODataListBinding); // private constructor
+ * assertUi5Instance(listBinding, ODataListBinding); // private constructor doesn't work
  * ```
  *
  * This fails because `InstanceType<T>` requires a public constructor.
@@ -31,6 +31,10 @@ import BaseObject from "sap/ui/base/Object"
  *
  * Not all subclasses of `BaseObject` expose `getMetadata` as a static method,
  * but this approach works for the majority of common UI5 classes.
+ * 
+ * ```TS
+ * const listBinding = table.getBinding("items");
+ * assertUi5Instance(listBinding, ODataListBinding) // works now
  *
  * ## Example Usage
  * ```ts
@@ -70,7 +74,7 @@ type CheckableType = BaseObject & { getMetadata(): Metadata } | undefined | null
  * Example:
  * ```ts
  * if (isUi5Instance(control, Button)) {
- *   control.setText("Click me");
+ *   control.setText("Click me"); // TS knows control is a Button instance due to predicate
  * }
  * ```
  */
