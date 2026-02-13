@@ -62,7 +62,7 @@ type AllowedClass<T extends BaseObject> = {
  * console.log(Button.getMetadata().getName()); // "sap.m.Button"
  * ```
  */
-type CheckableType = BaseObject & { getMetadata(): Metadata } | undefined | null
+type CheckableType = BaseObject | undefined | null
 
 /**
  * Type guard to check whether a given object is an instance of a specific UI5 class.
